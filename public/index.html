@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Assessment</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #004b6d;
+            color: #fff;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+            margin-top: 20px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-textarea {
+            resize: vertical;
+        }
+
+        /* Radio Group Styling */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-group label {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Button Styling */
+        .submit-btn {
+            background-color: #004b6d;
+            color: #fff;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #00324b;
+        }
+
+        .submit-btn:focus {
+            outline: none;
+        }
+
+        /* Bottom Logo Section */
+        .bottom-logo {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #f4f7fc;
+            margin-top: 40px;
+        }
+
+        .bottom-logo img {
+            width: 150px;
+            height: auto;
+        }
+
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .form-label {
+                font-size: 12px;
+            }
+
+            .submit-btn {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="logo2.jpg" alt="Company Logo">
+        <h1>Candidate Assessment Form</h1>
+    </header>
+
+    <!-- Page 1 -->
+    <div class="container" id="page1">
+        <form action="submit.php" method="POST">
+            <!-- Full Name -->
+            <label class="form-label" for="name">Full Name:</label>
+            <input type="text" class="form-input" id="name" name="name" required>
+
+            <!-- Email Address -->
+            <label class="form-label" for="email">Email Address:</label>
+            <input type="email" class="form-input" id="email" name="email" required>
+			
+			<!-- Phone Number -->
+			<label class="form-label" for="number">Phone Number:</label>
+			<input type="tel" class="form-input" id="number" name="number" required >
+
+            <hr>
+            <!-- Questions Section -->
+            <h2>Operational Logistics Questions</h2>
+            <hr>
+
+            <!-- Questions 1-10 -->
+            <!-- Add your questions here, keeping them unique -->
+			
+            <!-- Question 1 -->
+            <div class="question">
+                <label class="form-label" for="question1">1. What is the primary goal of route optimization in a gas delivery business like Easishoppe?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question1A" name="question1" value="A" required> A) To minimize delivery costs</label>
+                    <label><input type="radio" id="question1B" name="question1" value="B"> B) To ensure faster deliveries to customers</label>
+                    <label><input type="radio" id="question1C" name="question1" value="C"> C) To reduce environmental impact</label>
+                    <label><input type="radio" id="question1D" name="question1" value="D"> D) All of the above</label>
+                </div>
+            </div><br>
+
+			  <!-- Question 2 -->
+            <div class="question">
+                <label class="form-label" for="question2">2. Which of the following is a key factor in improving the fuel delivery efficiency for your fleet?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question2A" name="question2" value="A" required> A) Maintaining delivery trucks on a regular maintenance schedule</label>
+                    <label><input type="radio" id="question2B" name="question2" value="B"> B) Hiring more drivers</label>
+                    <label><input type="radio" id="question2C" name="question2" value="C"> C) Delivering only during peak traffic hours</label>
+                    <label><input type="radio" id="question2D" name="question2" value="D"> D) Ignoring weather forecasts</label>
+                </div>
+            </div>
+				<br>
+
+						<!-- Question 3 -->
+            <div class="question">
+                <label class="form-label" for="question3">3. What is the most important safety protocol to follow when delivering gas cylinders ?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question3A" name="question3" value="A" required> A) Always check the weather conditions before the delivery</label>
+                    <label><input type="radio" id="question3B" name="question3" value="B"> B) Ensure the delivery vehicle is parked at least 5 meters from any open flame</label>
+                    <label><input type="radio" id="question3C" name="question3" value="C"> C) Confirm that all customers are available before delivery</label>
+                    <label><input type="radio" id="question3D" name="question3" value="D"> D) Avoid delivering during the night to prevent accidents</label>
+                </div>
+            </div>
+					<br>
+				            <!-- Question 4-->
+            <div class="question">
+                <label class="form-label" for="question4">4. How should you handle inventory discrepancies between what’s recorded in the system and what’s physically available?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question4A" name="question4" value="A" required> A) Ignore the discrepancy and proceed with deliveries</label>
+                    <label><input type="radio" id="question4B" name="question4" value="B"> B) Report the discrepancy to the supervisor and conduct a physical stock audit</label>
+                    <label><input type="radio" id="question4C" name="question4" value="C"> C) Remove the discrepancy from the system without notifying anyone</label>
+                    <label><input type="radio" id="question4D" name="question4" value="D"> D) Continue deliveries, but adjust future inventory reports to reflect actual stock</label>
+                </div>
+            </div>
+					<br>
+				            <!-- Question 5 -->
+            <div class="question">
+                <label class="form-label" for="question5">5. If a delivery is late due to traffic congestion in Cape Town, what is the best course of action?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question5A" name="question5" value="A" required> A) Apologize to the customer and offer a discount on the next delivery</label>
+                    <label><input type="radio" id="question5B" name="question5" value="B"> B) Inform the customer of the delay as soon as possible and provide an updated estimated delivery time</label>
+                    <label><input type="radio" id="question5C" name="question5" value="C"> C) Simply apologize once the delivery arrives</label>
+                    <label><input type="radio" id="question5D" name="question5" value="D"> D) No need to inform the customer; just make the delivery</label>
+                </div>
+            </div>
+					<br>
+			
+			<br>
+						  <!-- Question 6 -->
+            <div class="question">
+                <label class="form-label" for="question6">6. How does Easishoppe ensure compliance with the legal regulations regarding gas delivery in Cape Town?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question6A" name="question6" value="A" required> A) Regular training and certification of delivery drivers</label>
+                    <label><input type="radio" id="question6B" name="question6" value="B"> B) Ignoring minor regulatory changes if they do not directly impact operations</label>
+                    <label><input type="radio" id="question6C" name="question6" value="C"> C) Relying on customers to ensure safety compliance</label>
+                    <label><input type="radio" id="question6D" name="question6" value="D"> D) Delivering only during certain hours of the day</label>
+                </div>
+            </div>
+				<br>
+
+						<!-- Question 7-->
+            <div class="question">
+                <label class="form-label" for="question7">7. Which method is best for creating an efficient delivery schedule for gas deliveries in Cape Town?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question7A" name="question7" value="A" required> A) Scheduling deliveries randomly to cover all areas</label>
+                    <label><input type="radio" id="question7B" name="question7" value="B"> B) Using a digital scheduling tool that factors in customer locations and traffic patterns</label>
+                    <label><input type="radio" id="question7C" name="question7" value="C"> C) Only scheduling deliveries for the morning hours to avoid rush hour</label>
+                    <label><input type="radio" id="question7D" name="question7" value="D"> D) Scheduling deliveries based on customer complaints</label>
+                </div>
+            </div>
+					<br>
+				            <!-- Question 8-->
+            <div class="question">
+                <label class="form-label" for="question8">8. What is a key consideration when packaging and labeling gas cylinders for delivery?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question8A" name="question8" value="A" required> A) Ensure that the label includes a clear indication of the contents and safety warnings</label>
+                    <label><input type="radio" id="question8B" name="question8" value="B"> B)Label the cylinders based on their size and color only</label>
+                    <label><input type="radio" id="question8C" name="question8" value="C"> C) Pack the cylinders tightly to minimize space in the vehicle</label>
+                    <label><input type="radio" id="question8D" name="question8" value="D"> D) Use labels that are generic and can be used across all delivery types</label>
+                </div>
+            </div>
+					<br>
+				            <!-- Question 9 -->
+            <div class="question">
+                <label class="form-label" for="question9">9. If a customer complains about the delivery being late, how should you respond?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question9A" name="question9" value="A" required> A) Apologize for the inconvenience and offer a reasonable explanation, followed by a commitment to improve future service</label>
+                    <label><input type="radio" id="question9B" name="question9" value="B"> B) Tell the customer they should have planned better</label>
+                    <label><input type="radio" id="question9C" name="question9" value="C"> C) Offer a full refund for the late delivery</label>
+                    <label><input type="radio" id="question9D" name="question9" value="D"> D) Ignore the complaint and focus on future deliveries</label>
+                </div>
+            </div>
+					<br>
+				            <!-- Question 10 -->
+            <div class="question">
+                <label class="form-label" for="question10">10. What system should Easishoppe implement to track real-time deliveries and ensure accurate delivery windows?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question10A" name="question10" value="A" required> A) Manual logbooks for every delivery</label>
+                    <label><input type="radio" id="question10B" name="question10" value="B"> B) A GPS-enabled system that tracks truck locations and provides live updates to customers</label>
+                    <label><input type="radio" id="question10C" name="question10" value="C"> C) No tracking is needed as long as deliveries are on time</label>
+                    <label><input type="radio" id="question10D" name="question10" value="D"> D) Paper-based receipts for each delivery</label>
+                </div>
+            </div>
+					<br>
+									           <!-- Question 11 -->
+            <div class="question">
+                <label class="form-label" for="question11">11. How should Easishoppe ensure a steady supply of gas for customers, especially during peak demand periods?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question11A" name="question11" value="A" required> A) Increase the frequency of deliveries to high-demand areas</label>
+                    <label><input type="radio" id="question11B" name="question11" value="B"> B) Reduce delivery times to make up for slower supply</label>
+                    <label><input type="radio" id="question11C" name="question11" value="C"> C) Ensure proper inventory forecasting and stock management to prevent shortages</label>
+                    <label><input type="radio" id="question11D" name="question11" value="D"> D) All over the above </label>
+                </div>
+            </div>
+			<br>
+			
+			<br>
+							            <!-- Question 12-->
+            <div class="question">
+                <label class="form-label" for="question12">12. If a customer wants to return a gas cylinder due to a defect, what is the best practice?</label>
+                <div class="radio-group">
+
+                    <label><input type="radio" id="question12A" name="question12" value="A" required> A) Refuse to accept the return unless the customer has proof of purchase</label>
+                    <label><input type="radio" id="question12B" name="question12" value="B"> B) Accept the return, assess the defect, and arrange for a replacement or refund as per the company’s policy</label>
+                    <label><input type="radio" id="question12C" name="question12" value="C"> C) Send the defective cylinder back to the supplier without notifying the customer</label>
+                    <label><input type="radio" id="question12D" name="question12" value="D"> D) Ignore the return request and notify the customer of the non-return policy</label>
+                </div>
+            </div>
+			<br>
+							            <!-- Question 13 -->
+            <div class="question">
+                <label class="form-label" for="question13">13. During Cape Town’s peak winter months, how can Easishoppe manage the increased demand for gas deliveries?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question13A" name="question13" value="A" required> A) Hire temporary drivers and extend operating hours to cover more deliveries</label>
+                    <label><input type="radio" id="question13B" name="question13" value="B"> B) Reduce delivery days to avoid congestion</label>
+                    <label><input type="radio" id="question13C" name="question13" value="C"> C) Limit deliveries to major areas only</label>
+                    <label><input type="radio" id="question13D" name="question13" value="D"> D) Increase prices to discourage demand</label>
+                </div>
+            </div>
+			<br>
+										            <!-- Question 14-->
+            <div class="question">
+                <label class="form-label" for="question14">14. If one of the gas delivery trucks is involved in an accident, what is the first step to take?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question14A" name="question14" value="A" required> A) Immediately contact the police and emergency services</label>
+                    <label><input type="radio" id="question14B" name="question14" value="B"> B) Assess the damage and report it to the logistics manager</label>
+                    <label><input type="radio" id="question14C" name="question14" value="C"> C) Try to move the vehicle out of the way</label>
+                    <label><input type="radio" id="question14D" name="question14" value="D"> D) Inform the customer of the delay</label>
+                </div>
+            </div>
+			<br>
+										            <!-- Question 15 -->
+            <div class="question">
+                <label class="form-label" for="question15">15. When handling gas cylinders, what is the most important thing to ensure?</label>
+                <div class="radio-group">
+                    <label><input type="radio" id="question15A" name="question15" value="A" required> A) That they are stored vertically and in a well-ventilated area</label>
+                    <label><input type="radio" id="question15B" name="question15" value="B"> B) That they are kept in the truck for as long as possible to avoid storage issues</label>
+                    <label><input type="radio" id="question15C" name="question15" value="C"> C) That they are marked with the customer’s address for easy identification</label>
+                    <label><input type="radio" id="question15D" name="question15" value="D"> D) That cylinders are never transported by more than one person</label>
+                </div>
+            </div>
+
+<hr>
+            
+            <button type="button" class="submit-btn" onclick="nextPage()">Next</button>
+      
+    </div>
+
+<!-- Page 2 -->
+<div class="container" id="page2" style="display:none;">
+    <!-- Case Study Section -->
+    <h2>Case Study: Handling Logistics Challenges in Commercial Gas Deliveries</h2>
+    <hr>
+    <p>
+        <strong>Background:</strong> Easishoppe is a commercial gas supplier to
+		various businesses across Cape Town. 
+		As a member of the operations team, 
+		you are responsible for ensuring timely deliveries, 
+		managing paperwork, and supporting drivers for efficient operations.
+    </p>
+    <p>
+        This morning, you face two urgent issues:
+		a delivery truck is delayed due to heavy traffic, 
+		causing a late delivery to 5 star Hotel that relies on the gas for their breakfast run. 
+		The Hotel has called to complain and is growing frustrated. 
+		Additionally, another truck has broken down on its way to a client, 
+		and this delivery is also critical for the client’s operations.
+    </p>
+    <p>
+        <strong>Assignment:</strong> How would you manage the delayed delivery to the restaurant? Describe your approach to communicating with the customer and managing their expectations. What steps would you take to minimize the impact of this delay and ensure the delivery is completed quickly? For the truck breakdown, what immediate actions would you take to resolve the situation, and how would you keep the customer informed while organizing a solution? Additionally, considering these types of issues, what proactive measures would you implement to minimize delays and breakdowns in the future? How would you handle multiple logistics challenges at once, and what improvements could you propose to improve Easishoppe’s overall logistics operations?
+    </p>
+    <p>Provide your solutions below:</p>
+    <textarea name="case_study" class="form-textarea" rows="5" required></textarea>
+   
+            <!-- Back Button -->
+        <button type="button" class="submit-btn" onclick="previousPage()">Back</button>
+        
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <div class="bottom-logo">
+        <p><i>Proud Distributor of</i></p>
+        <img src="logo.png" alt="logo" />
+    </div>
+
+<script>
+function nextPage() {
+    document.getElementById('page1').style.display = 'none';
+    document.getElementById('page2').style.display = 'block';
+}
+
+function previousPage() {
+    document.getElementById('page2').style.display = 'none';
+    document.getElementById('page1').style.display = 'block';
+}
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    // event.preventDefault();  // Remove this line to allow normal form submission
+    alert("Form submitted!"); // You can still keep the alert for confirmation
+    // The form will be submitted automatically as per the action defined in the form tag.
+});
+
+</script>
+
+</body>
+
+</html>
