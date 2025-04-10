@@ -143,6 +143,25 @@
             text-align: center;
             margin-top: 20px;
         }
+	.password-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    z-index: 9999; /* Ensures it covers everything */
+    color: white;
+}
+
+.password-input, .submit-btn {
+    padding: 10px;
+    margin: 10px;
+}
+
     </style>
 </head>
 
@@ -355,6 +374,7 @@
             </div>
 
 <hr>
+		<div id="timer">Time Remaining: <span id="time-remaining">00:30</span></div>
             
             <button type="button" class="submit-btn" onclick="nextPage()">Next</button>
       
@@ -401,8 +421,6 @@
     </div>
 
 <script>
-// Ensure the form interaction is locked by default and unlock it after password verification
-
 function nextPage() {
     document.getElementById('page1').style.display = 'none';
     document.getElementById('page2').style.display = 'block';
@@ -413,28 +431,15 @@ function previousPage() {
     document.getElementById('page1').style.display = 'block';
 }
 
-function verifyPassword() {
-    const passwordInput = document.getElementById('password').value;
-    const correctPassword = 'yourpassword'; // Replace with the actual password
-
-    if (passwordInput === correctPassword) {
-        // Hide password screen, show quiz
-        document.getElementById('password-screen').style.display = 'none';
-        document.getElementById('page1').style.display = 'block';
-        document.getElementById('page2').style.display = 'block';
-
-        // Enable interactions by removing pointer-events
-        document.getElementById('page1').style.pointerEvents = 'auto';
-        document.getElementById('page2').style.pointerEvents = 'auto';
-        startTimer(); // Start the timer
-    } else {
-        alert('Incorrect Password');
-    }
-}
+document.querySelector('form').addEventListener('submit', function(event) {
+    // event.preventDefault();  // Remove this line to allow normal form submission
+    alert("Form submitted!"); // You can still keep the alert for confirmation
+    // The form will be submitted automatically as per the action defined in the form tag.
+});
 
 // Timer setup
 let timer;
-let timeLeft = 30; // 30 seconds for demo, change as needed
+let timeLeft = 20; // 30 seconds for demo, change as needed
 
 function startTimer() {
     const timerElement = document.getElementById('time-remaining');
@@ -442,7 +447,8 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timer);
             alert("Time's up!");
-            document.getElementById('page2').style.pointerEvents = 'none'; // Disable form interaction after time's up
+            // Disable only the timer (not the submit button)
+            document.getElementById('timer').style.pointerEvents = 'none'; // Disable only timer interaction
         } else {
             timeLeft--;
             timerElement.innerText = formatTime(timeLeft);
@@ -454,6 +460,24 @@ function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const secondsLeft = seconds % 60;
     return `${String(minutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+}
+
+// Password verification
+function verifyPassword() {
+    const passwordInput = document.getElementById('password').value;
+    const correctPassword = 'yourpassword'; // Replace with the actual password
+
+    if (passwordInput === correctPassword) {
+        // Hide password screen, show quiz
+        document.getElementById('password-screen').style.display = 'none';
+        document.getElementById('page1').style.display = 'block';
+        document.getElementById('page2').style.display = 'block';
+        document.getElementById('page1').style.pointerEvents = 'auto'; // Enable interactions
+        document.getElementById('page2').style.pointerEvents = 'auto'; // Enable interactions
+        startTimer(); // Start the timer
+    } else {
+        alert('Incorrect Password');
+    }
 }
 </script>
 
