@@ -143,7 +143,7 @@
             text-align: center;
             margin-top: 20px;
         }
-	.password-container {
+.password-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -152,26 +152,71 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
-    z-index: 9999; /* Ensures it covers everything */
+    background-color: rgba(0, 0, 0, 0.8); /* Darker overlay for better contrast */
     color: white;
+    font-family: 'Arial', sans-serif;
+    z-index: 9999;
 }
 
-.password-input, .submit-btn {
+.password-content {
+    background-color: #333; /* Dark background for better readability */
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.password-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.instruction-text {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.password-input {
     padding: 10px;
-    margin: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.submit-btn {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
 }
 
     </style>
 </head>
 
 <body>
-    <!-- Password Screen -->
-    <div class="password-container" id="password-screen">
-        <h1>Enter Password to Start</h1>
+<!-- Password Screen -->
+<div class="password-container" id="password-screen">
+    <div class="password-content">
+        <h1>Access Test</h1>
+        <p class="instruction-text">Please enter the password below to begin the assessment. You will have 15 minutes to complete the test once you start.</p>
         <input type="password" id="password" class="password-input" placeholder="Enter Password" required>
-        <button class="submit-btn" onclick="verifyPassword()">Submit</button>
+        <button class="submit-btn" onclick="verifyPassword()">Start Test</button>
     </div>
+</div>
 
     <header>
         <img src="logo2.jpg" alt="Company Logo">
@@ -374,8 +419,7 @@
             </div>
 
 <hr>
-		<div id="timer">Time Remaining: <span id="time-remaining">00:30</span></div>
-            
+	    
             <button type="button" class="submit-btn" onclick="nextPage()">Next</button>
       
     </div>
