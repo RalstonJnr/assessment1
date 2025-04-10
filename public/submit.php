@@ -9,7 +9,7 @@ try {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
-            number INTEGER NOT NULL,
+            number TEXT NOT NULL,
             question1 TEXT NOT NULL,
             question2 TEXT NOT NULL,
             question3 TEXT NOT NULL,
@@ -76,7 +76,7 @@ try {
     // Bind values
     $stmt->bindValue(':name', $name, SQLITE3_TEXT);
     $stmt->bindValue(':email', $email, SQLITE3_TEXT);
-    $stmt->bindValue(':number', $number, SQLITE3_INTEGER);
+    $stmt->bindValue(':number', $number, SQLITE3_TEXT);
 
     $stmt->bindValue(':question1', $question1 ?: 'N/A', SQLITE3_TEXT);
     $stmt->bindValue(':question2', $question2 ?: 'N/A', SQLITE3_TEXT);
