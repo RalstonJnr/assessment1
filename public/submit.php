@@ -1,5 +1,8 @@
 <?php
 try {
+    // Set timezone to South Africa
+    date_default_timezone_set('Africa/Johannesburg');
+
     // Open or create the SQLite3 database file
     $db = new SQLite3('/mnt/data/database.db');
 
@@ -26,7 +29,7 @@ try {
             question14 TEXT NOT NULL,
             question15 TEXT NOT NULL,
             case_study TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_at DATETIME NOT NULL
         );
     ";
     $db->exec($createTableQuery);
@@ -67,11 +70,14 @@ try {
         throw new Exception('Invalid email format.');
     }
 
+    // Get current time in South African timezone
+    $createdAt = date('Y-m-d H:i:s');
+
     // Insert into database
     $stmt = $db->prepare("INSERT INTO responses 
-        (name, email, number, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11, question12, question13, question14, question15, case_study) 
+        (name, email, number, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11, question12, question13, question14, question15, case_study, created_at) 
         VALUES 
-        (:name, :email, :number, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10, :question11, :question12, :question13, :question14, :question15, :caseStudy)");
+        (:name, :email, :number, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10, :question11, :question12, :question13, :question14, :question15, :caseStudy, :created_at)");
 
     // Bind values
     $stmt->bindValue(':name', $name, SQLITE3_TEXT);
@@ -94,6 +100,7 @@ try {
     $stmt->bindValue(':question14', $question14 ?: 'N/A', SQLITE3_TEXT);
     $stmt->bindValue(':question15', $question15 ?: 'N/A', SQLITE3_TEXT);
     $stmt->bindValue(':caseStudy', $caseStudy ?: 'N/A', SQLITE3_TEXT);
+    $stmt->bindValue(':created_at', $createdAt, SQLITE3_TEXT);
 
     // Execute
     $result = $stmt->execute();
