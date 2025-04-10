@@ -8,7 +8,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 // Connect to the SQLite3 database
-$db = new SQLite3('C:/xampp/htdocs/mywebsite/database.db');
+$db = new SQLite3('/mnt/data/database.db');
 
 // Check if the user ID is passed as a URL parameter
 if (!isset($_GET['user_id'])) {
