@@ -2,8 +2,8 @@
 session_start();
 
 // Define admin username and password (use environment variables or a secure method in production)
-$admin_username = "admin";
-$admin_password = "password"; // Hard coded for simplicity 
+$admin_username = "Ashwin Smith";
+$admin_password = "Easishoppe77481"; // Hard coded for simplicity 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and validate input
