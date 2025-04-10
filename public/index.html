@@ -208,16 +208,15 @@
 </head>
 
 <body>
-<!-- Password Screen -->
-<div class="password-container" id="password-screen">
-    <div class="password-content">
-        <h1>Access Test</h1>
-        <p class="instruction-text">Please enter the password below to begin the assessment. You will have 15 minutes to complete the test once you start.</p>
-        <input type="password" id="password" class="password-input" placeholder="Enter Password" required>
-        <button class="submit-btn" onclick="verifyPassword()">Start Test</button>
+<!-- Fullscreen Password Screen -->
+<div class="password-container" id="password-screen" style="position:fixed; top:0; left:0; width:100%; height:100vh; background:#fff; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center;">
+    <div class="password-content" style="max-width:400px;">
+        <h1>Access the Candidate Assessment</h1>
+        <p class="instruction-text" style="margin-bottom:20px;">Please enter the password to begin. You will have <strong>15 minutes</strong> to complete the test once started.</p>
+        <input type="password" id="password" class="password-input" placeholder="Enter Password" required style="padding:10px; width:100%; margin-bottom:10px;">
+        <button class="submit-btn" onclick="verifyPassword()" style="padding:10px 20px;">Start Test</button>
     </div>
 </div>
-
     <header>
         <img src="logo2.jpg" alt="Company Logo">
         <h1>Candidate Assessment Form</h1>
@@ -475,24 +474,22 @@ function previousPage() {
     document.getElementById('page1').style.display = 'block';
 }
 
+// Form submission alert
 document.querySelector('form').addEventListener('submit', function(event) {
-    // event.preventDefault();  // Remove this line to allow normal form submission
-    alert("Form submitted!"); // You can still keep the alert for confirmation
-    // The form will be submitted automatically as per the action defined in the form tag.
+    alert("Form submitted!");
 });
 
-// Timer setup
+// Timer Setup
 let timer;
-let timeLeft = 20; // 30 seconds for demo, change as needed
+let timeLeft = 15 * 60; // 15 minutes in seconds
 
 function startTimer() {
     const timerElement = document.getElementById('time-remaining');
-    timer = setInterval(function () {
+    timer = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(timer);
-            alert("Time's up!");
-            // Disable only the timer (not the submit button)
-            document.getElementById('timer').style.pointerEvents = 'none'; // Disable only timer interaction
+            timerElement.innerText = "00:00";
+            alert("Time's up! Please submit your test now.");
         } else {
             timeLeft--;
             timerElement.innerText = formatTime(timeLeft);
@@ -502,25 +499,23 @@ function startTimer() {
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
-    const secondsLeft = seconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-// Password verification
+// Password Validation
 function verifyPassword() {
-    const passwordInput = document.getElementById('password').value;
-    const correctPassword = 'yourpassword'; // Replace with the actual password
+    const input = document.getElementById('password').value;
+    const correct = 'yourpassword'; // Change this password
 
-    if (passwordInput === correctPassword) {
-        // Hide password screen, show quiz
+    if (input === correct) {
         document.getElementById('password-screen').style.display = 'none';
         document.getElementById('page1').style.display = 'block';
-        document.getElementById('page2').style.display = 'block';
-        document.getElementById('page1').style.pointerEvents = 'auto'; // Enable interactions
-        document.getElementById('page2').style.pointerEvents = 'auto'; // Enable interactions
-        startTimer(); // Start the timer
+        document.getElementById('page1').style.pointerEvents = 'auto';
+        document.getElementById('page2').style.pointerEvents = 'auto';
+        startTimer();
     } else {
-        alert('Incorrect Password');
+        alert('Incorrect password. Please try again.');
     }
 }
 </script>
