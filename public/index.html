@@ -147,7 +147,7 @@
 </head>
 
 <body>
-      <!-- Password Screen -->
+    <!-- Password Screen -->
     <div class="password-container" id="password-screen">
         <h1>Enter Password to Start</h1>
         <input type="password" id="password" class="password-input" placeholder="Enter Password" required>
@@ -430,7 +430,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     alert("Time's up!");
-                    document.getElementById('quiz-page').style.pointerEvents = 'none'; // Disable form
+                    document.getElementById('page2').style.pointerEvents = 'none'; // Disable form interaction after time's up
                 } else {
                     timeLeft--;
                     timerElement.innerText = formatTime(timeLeft);
@@ -452,7 +452,10 @@ document.querySelector('form').addEventListener('submit', function(event) {
             if (passwordInput === correctPassword) {
                 // Hide password screen, show quiz
                 document.getElementById('password-screen').style.display = 'none';
-                document.getElementById('quiz-page').style.display = 'block';
+                document.getElementById('page1').style.display = 'block';
+                document.getElementById('page2').style.display = 'block';
+                document.getElementById('page1').style.pointerEvents = 'auto'; // Enable interactions
+                document.getElementById('page2').style.pointerEvents = 'auto'; // Enable interactions
                 startTimer(); // Start the timer
             } else {
                 alert('Incorrect Password');
