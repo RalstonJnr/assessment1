@@ -1,7 +1,8 @@
 <?php
 try {
     // Open (or create) the SQLite3 database file
-    $db = new SQLite3('C:/xampp/htdocs/mywebsite/database.db');  // Ensure this path is correct
+    $db = new SQLite3('/mnt/data/database.db');
+ // Ensure this path is correct
 
     // Create table for storing form responses if it doesn't exist
     $createTableQuery = "
