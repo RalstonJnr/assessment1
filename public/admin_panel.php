@@ -7,9 +7,48 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit;
 }
 
+// Check if the CSV download button was clicked
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_csv'])) {
+    // Connect to the SQLite3 database
+    $db = new SQLite3('/mnt/data/database.db');
+
+    // Query all responses
+    $query = "SELECT * FROM responses ORDER BY created_at DESC";
+    $results = $db->query($query);
+
+    // Set headers for file download
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="responses.csv"');
+
+    // Open PHP output as a file
+    $output = fopen('php://output', 'w');
+
+    // Output column headings
+    fputcsv($output, [
+        'ID', 'Name', 'Email', 'Number',
+        'Question1', 'Question2', 'Question3', 'Question4', 'Question5',
+        'Question6', 'Question7', 'Question8', 'Question9', 'Question10',
+        'Question11', 'Question12', 'Question13', 'Question14', 'Question15',
+        'Case Study', 'Submitted At'
+    ]);
+
+    // Output each row of data
+    while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+        fputcsv($output, [
+            $row['id'], $row['name'], $row['email'], $row['number'],
+            $row['question1'], $row['question2'], $row['question3'], $row['question4'], $row['question5'],
+            $row['question6'], $row['question7'], $row['question8'], $row['question9'], $row['question10'],
+            $row['question11'], $row['question12'], $row['question13'], $row['question14'], $row['question15'],
+            $row['case_study'], $row['created_at']
+        ]);
+    }
+
+    fclose($output); // Close the file
+    exit; // Stop further rendering of the page
+}
+
 // Connect to the SQLite3 database
 $db = new SQLite3('/mnt/data/database.db');
-
 
 // Check if the database connection was successful
 if (!$db) {
@@ -138,7 +177,7 @@ $results = $db->query($query);
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Number</th>
@@ -167,7 +206,6 @@ $results = $db->query($query);
 
 </body>
 </html>
-
 
 <?php
 // Close the database connection after finishing the data fetch
