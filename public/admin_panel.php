@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Define admin password
-$admin_password = "password"; // Same as in login.php
+$admin_password = "Easishoppe77481"; // Same as in login.php
 
 // Redirect if not logged in
 if (!isset($_SESSION['admin_logged_in'])) {
