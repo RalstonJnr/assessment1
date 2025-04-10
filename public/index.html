@@ -481,7 +481,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
 // Timer Setup
 let timer;
-let timeLeft = 2 * 60; // 15 minutes in seconds
+let timeLeft = 15 * 60; // 15 minutes in seconds
 
 function startTimer() {
     const timerElement = document.getElementById('time-remaining');
@@ -513,7 +513,7 @@ function formatTime(seconds) {
 // Password Validation
 function verifyPassword() {
     const input = document.getElementById('password').value;
-    const correct = 'yourpassword'; // Change this password
+    const correct = 'Easishoppe@1'; // Change this password
 
     if (input === correct) {
         document.getElementById('password-screen').style.display = 'none';
