@@ -1,8 +1,12 @@
 <?php
 session_start();
 
+// Enable error reporting (for debugging only – remove in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Define admin password
-$admin_password = "your_secure_admin_password"; // Change this!
+$admin_password = "your_secure_admin_password"; // Change this securely!
 
 // Redirect if not logged in
 if (!isset($_SESSION['admin_logged_in'])) {
@@ -10,7 +14,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit;
 }
 
-// Handle CSV download
+$error_message = "";
+
+// Handle CSV Download
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_csv'])) {
     $db = new SQLite3('/mnt/data/database.db');
     $query = "SELECT * FROM responses ORDER BY created_at DESC";
@@ -49,15 +55,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         $db = new SQLite3('/mnt/data/database.db');
         $stmt = $db->prepare("DELETE FROM responses WHERE id = ?");
         $stmt->bindValue(1, $delete_id, SQLITE3_INTEGER);
-        $stmt->execute();
-        header("Location: admin_panel.php?deleted=1");
-        exit;
+        $result = $stmt->execute();
+        if ($result) {
+            header("Location: admin_panel.php?deleted=1");
+            exit;
+        } else {
+            $error_message = "Deletion failed: " . $db->lastErrorMsg();
+        }
     } else {
         $error_message = "Incorrect admin password. Deletion failed.";
     }
 }
 
-// Fetch all responses
+// Fetch responses
 $db = new SQLite3('/mnt/data/database.db');
 $query = "SELECT * FROM responses ORDER BY created_at DESC";
 $results = $db->query($query);
@@ -67,7 +77,6 @@ $results = $db->query($query);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - View Responses</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -75,43 +84,35 @@ $results = $db->query($query);
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f5f5f5;
-            margin: 0;
             padding: 20px;
             color: #333;
         }
         h2 {
             text-align: center;
             color: #007bff;
-            margin-bottom: 20px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
         .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: #fff;
             padding: 20px;
-            margin-bottom: 30px;
-        }
-        .csv-btn-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-top: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .btn {
             padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
             border: none;
+            border-radius: 5px;
+            color: white;
+            background: #007bff;
             cursor: pointer;
+            font-size: 14px;
         }
         .btn:hover {
-            background-color: #0056b3;
+            background: #0056b3;
         }
         .logout-btn {
             background-color: #dc3545;
@@ -125,35 +126,30 @@ $results = $db->query($query);
             margin-top: 20px;
         }
         th, td {
-            padding: 15px;
-            text-align: left;
+            padding: 14px;
             border-bottom: 1px solid #ddd;
+            text-align: left;
         }
         th {
-            background-color: #007bff;
+            background: #007bff;
             color: white;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
         .delete-btn {
             background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 6px 10px;
         }
-
         .delete-btn:hover {
             background-color: #c82333;
         }
-
-        /* Modal Styling */
+        .csv-btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* Modal Styles */
         #deleteModal {
             display: none;
             position: fixed;
@@ -168,16 +164,15 @@ $results = $db->query($query);
             padding: 20px;
             border-radius: 8px;
         }
-
         .error-message {
             color: red;
             text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
         }
-
         .success-message {
             color: green;
             text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -191,14 +186,14 @@ $results = $db->query($query);
     <?php endif; ?>
 
     <?php if (!empty($error_message)): ?>
-        <p class="error-message"><?php echo $error_message; ?></p>
+        <p class="error-message"><?php echo htmlspecialchars($error_message); ?></p>
     <?php endif; ?>
 
     <div class="card">
         <div class="csv-btn-container">
-            <form method="post" style="margin:0;">
+            <form method="post">
                 <button type="submit" name="download_csv" class="btn">
-                    <i class="fas fa-download"></i> Download CSV Report
+                    <i class="fas fa-download"></i> Download CSV
                 </button>
             </form>
             <a href="logout.php" class="btn logout-btn">
@@ -213,23 +208,23 @@ $results = $db->query($query);
                     <th>Name</th>
                     <th>Email</th>
                     <th>Number</th>
-                    <th>Submission Date</th>
-                    <th>Actions</th>
+                    <th>Submitted</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-            <?php while ($row = $results->fetchArray()) { ?>
+                <?php while ($row = $results->fetchArray(SQLITE3_ASSOC)): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($row['id']); ?></td>
                     <td><a href="view_responses.php?user_id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['name']); ?></a></td>
                     <td><?php echo htmlspecialchars($row['email']); ?></td>
                     <td><?php echo htmlspecialchars($row['number']); ?></td>
-                    <td><?php echo $row['created_at']; ?></td>
+                    <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                     <td>
-                        <button class="delete-btn" onclick="promptDelete(<?php echo $row['id']; ?>)">Delete</button>
+                        <button class="btn delete-btn" onclick="promptDelete(<?php echo $row['id']; ?>)">Delete</button>
                     </td>
                 </tr>
-            <?php } ?>
+                <?php endwhile; ?>
             </tbody>
         </table>
     </div>
@@ -241,7 +236,7 @@ $results = $db->query($query);
         <h3>Confirm Deletion</h3>
         <form method="post">
             <input type="hidden" name="delete_id" id="delete_id_input">
-            <label for="admin_password">Admin Password:</label>
+            <label for="admin_password">Enter Admin Password:</label>
             <input type="password" name="admin_password" required style="width:100%; margin-top:10px; padding:10px;">
             <div style="margin-top:15px; text-align:right;">
                 <button type="submit" name="confirm_delete" class="btn delete-btn">Confirm Delete</button>
@@ -249,4 +244,17 @@ $results = $db->query($query);
             </div>
         </form>
     </div>
-</
+</div>
+
+<script>
+function promptDelete(id) {
+    document.getElementById('delete_id_input').value = id;
+    document.getElementById('deleteModal').style.display = 'block';
+}
+function closeModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+</script>
+
+</body>
+</html>
