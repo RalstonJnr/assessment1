@@ -1,29 +1,25 @@
 <?php
 session_start();
 
-// Check if the admin is logged in
+// Define admin password
+$admin_password = "your_secure_admin_password"; // Change this!
+
+// Redirect if not logged in
 if (!isset($_SESSION['admin_logged_in'])) {
-    header('Location: login.php'); // Redirect to login if not logged in
+    header('Location: login.php');
     exit;
 }
 
-// Check if the CSV download button was clicked
+// Handle CSV download
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_csv'])) {
-    // Connect to the SQLite3 database
     $db = new SQLite3('/mnt/data/database.db');
-
-    // Query all responses
     $query = "SELECT * FROM responses ORDER BY created_at DESC";
     $results = $db->query($query);
 
-    // Set headers for file download
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename="responses.csv"');
 
-    // Open PHP output as a file
     $output = fopen('php://output', 'w');
-
-    // Output column headings
     fputcsv($output, [
         'ID', 'Name', 'Email', 'Number',
         'Question1', 'Question2', 'Question3', 'Question4', 'Question5',
@@ -32,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_csv'])) {
         'Case Study', 'Submitted At'
     ]);
 
-    // Output each row of data
     while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
         fputcsv($output, [
             $row['id'], $row['name'], $row['email'], $row['number'],
@@ -43,22 +38,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_csv'])) {
         ]);
     }
 
-    fclose($output); // Close the file
-    exit; // Stop further rendering of the page
+    fclose($output);
+    exit;
 }
 
-// Connect to the SQLite3 database
+// Handle Delete Request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
+    if ($_POST['admin_password'] === $admin_password) {
+        $delete_id = intval($_POST['delete_id']);
+        $db = new SQLite3('/mnt/data/database.db');
+        $stmt = $db->prepare("DELETE FROM responses WHERE id = ?");
+        $stmt->bindValue(1, $delete_id, SQLITE3_INTEGER);
+        $stmt->execute();
+        header("Location: admin_panel.php?deleted=1");
+        exit;
+    } else {
+        $error_message = "Incorrect admin password. Deletion failed.";
+    }
+}
+
+// Fetch all responses
 $db = new SQLite3('/mnt/data/database.db');
-
-// Check if the database connection was successful
-if (!$db) {
-    die("Database connection failed: " . $db->lastErrorMsg());
-}
-
-// Query to fetch all responses from the database
 $query = "SELECT * FROM responses ORDER BY created_at DESC";
 $results = $db->query($query);
-
 ?>
 
 <!DOCTYPE html>
@@ -95,28 +97,24 @@ $results = $db->query($query);
         }
         .csv-btn-container {
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-        .csv-btn-container form {
-            margin: 0;
+            justify-content: space-between;
+            align-items: center;
         }
         .btn {
-            display: inline-block;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
         }
         .btn:hover {
             background-color: #0056b3;
         }
         .logout-btn {
             background-color: #dc3545;
-            margin-left: 20px;
         }
         .logout-btn:hover {
             background-color: #c82333;
@@ -141,73 +139,114 @@ $results = $db->query($query);
         tr:hover {
             background-color: #f1f1f1;
         }
-        .case-study-column {
-            white-space: pre-wrap; /* Ensure multiline text is preserved */
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-            .btn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Modal Styling */
+        #deleteModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 999;
+        }
+        .modal-content {
+            background: #fff;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Admin Panel - View Responses</h2>
+<div class="container">
+    <h2>Admin Panel - View Responses</h2>
 
-        <div class="card">
-            <div class="csv-btn-container">
-                <form method="post">
-                    <button type="submit" name="download_csv" class="btn">
-                        <i class="fas fa-download"></i> Download CSV Report
-                    </button>
-                </form>
-                <a href="logout.php" class="btn logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
+    <?php if (isset($_GET['deleted'])): ?>
+        <p class="success-message">Candidate deleted successfully.</p>
+    <?php endif; ?>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Number</th>
-                        <th>Submission Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = $results->fetchArray()) { ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['id']); ?></td>
-                            <td>
-                                <!-- Create a clickable link for the name -->
-                                <a href="view_responses.php?user_id=<?php echo $row['id']; ?>" class="user-link">
-                                    <?php echo htmlspecialchars($row['name']); ?>
-                                </a>
-                            </td>
-                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                            <td><?php echo htmlspecialchars($row['number']); ?></td>
-                            <td><?php echo $row['created_at']; ?></td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+    <?php if (!empty($error_message)): ?>
+        <p class="error-message"><?php echo $error_message; ?></p>
+    <?php endif; ?>
+
+    <div class="card">
+        <div class="csv-btn-container">
+            <form method="post" style="margin:0;">
+                <button type="submit" name="download_csv" class="btn">
+                    <i class="fas fa-download"></i> Download CSV Report
+                </button>
+            </form>
+            <a href="logout.php" class="btn logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Number</th>
+                    <th>Submission Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php while ($row = $results->fetchArray()) { ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($row['id']); ?></td>
+                    <td><a href="view_responses.php?user_id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['name']); ?></a></td>
+                    <td><?php echo htmlspecialchars($row['email']); ?></td>
+                    <td><?php echo htmlspecialchars($row['number']); ?></td>
+                    <td><?php echo $row['created_at']; ?></td>
+                    <td>
+                        <button class="delete-btn" onclick="promptDelete(<?php echo $row['id']; ?>)">Delete</button>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
     </div>
+</div>
 
-</body>
-</html>
-
-<?php
-// Close the database connection after finishing the data fetch
-$db->close();
-?>
+<!-- Delete Modal -->
+<div id="deleteModal">
+    <div class="modal-content">
+        <h3>Confirm Deletion</h3>
+        <form method="post">
+            <input type="hidden" name="delete_id" id="delete_id_input">
+            <label for="admin_password">Admin Password:</label>
+            <input type="password" name="admin_password" required style="width:100%; margin-top:10px; padding:10px;">
+            <div style="margin-top:15px; text-align:right;">
+                <button type="submit" name="confirm_delete" class="btn delete-btn">Confirm Delete</button>
+                <button type="button" onclick="closeModal()" class="btn" style="margin-left:10px;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</
