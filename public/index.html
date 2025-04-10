@@ -160,7 +160,7 @@
     </header>
 
     <!-- Page 1 -->
-    <div class="container" id="page1">
+     <div class="container" id="page1" style="pointer-events: none;"> <!-- Disabled interaction by default -->
         <form action="submit.php" method="POST">
             <!-- Full Name -->
             <label class="form-label" for="name">Full Name:</label>
@@ -360,8 +360,8 @@
       
     </div>
 
-<!-- Page 2 -->
-<div class="container" id="page2" style="display:none;">
+ <!-- Page 2 -->
+    <div class="container" id="page2" style="display:none; pointer-events: none;"> <!-- Disabled interaction by default -->
     <!-- Case Study Section -->
     <h2>Case Study: Handling Logistics Challenges in Commercial Gas Deliveries</h2>
     <hr>
@@ -401,6 +401,8 @@
     </div>
 
 <script>
+// Ensure the form interaction is locked by default and unlock it after password verification
+
 function nextPage() {
     document.getElementById('page1').style.display = 'none';
     document.getElementById('page2').style.display = 'block';
@@ -411,57 +413,49 @@ function previousPage() {
     document.getElementById('page1').style.display = 'block';
 }
 
-document.querySelector('form').addEventListener('submit', function(event) {
-    // event.preventDefault();  // Remove this line to allow normal form submission
-    alert("Form submitted!"); // You can still keep the alert for confirmation
-    // The form will be submitted automatically as per the action defined in the form tag.
-});
+function verifyPassword() {
+    const passwordInput = document.getElementById('password').value;
+    const correctPassword = 'yourpassword'; // Replace with the actual password
 
+    if (passwordInput === correctPassword) {
+        // Hide password screen, show quiz
+        document.getElementById('password-screen').style.display = 'none';
+        document.getElementById('page1').style.display = 'block';
+        document.getElementById('page2').style.display = 'block';
+
+        // Enable interactions by removing pointer-events
+        document.getElementById('page1').style.pointerEvents = 'auto';
+        document.getElementById('page2').style.pointerEvents = 'auto';
+        startTimer(); // Start the timer
+    } else {
+        alert('Incorrect Password');
+    }
+}
+
+// Timer setup
+let timer;
+let timeLeft = 30; // 30 seconds for demo, change as needed
+
+function startTimer() {
+    const timerElement = document.getElementById('time-remaining');
+    timer = setInterval(function () {
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Time's up!");
+            document.getElementById('page2').style.pointerEvents = 'none'; // Disable form interaction after time's up
+        } else {
+            timeLeft--;
+            timerElement.innerText = formatTime(timeLeft);
+        }
+    }, 1000);
+}
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secondsLeft = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+}
 </script>
-
- <script>
-        // Timer setup
-        let timer;
-        let timeLeft = 30; // 30 seconds for demo, change as needed
-
-        function startTimer() {
-            const timerElement = document.getElementById('time-remaining');
-            timer = setInterval(function () {
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    alert("Time's up!");
-                    document.getElementById('page2').style.pointerEvents = 'none'; // Disable form interaction after time's up
-                } else {
-                    timeLeft--;
-                    timerElement.innerText = formatTime(timeLeft);
-                }
-            }, 1000);
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secondsLeft = seconds % 60;
-            return `${String(minutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
-        }
-
-        // Password verification
-        function verifyPassword() {
-            const passwordInput = document.getElementById('password').value;
-            const correctPassword = 'yourpassword'; // Replace with the actual password
-
-            if (passwordInput === correctPassword) {
-                // Hide password screen, show quiz
-                document.getElementById('password-screen').style.display = 'none';
-                document.getElementById('page1').style.display = 'block';
-                document.getElementById('page2').style.display = 'block';
-                document.getElementById('page1').style.pointerEvents = 'auto'; // Enable interactions
-                document.getElementById('page2').style.pointerEvents = 'auto'; // Enable interactions
-                startTimer(); // Start the timer
-            } else {
-                alert('Incorrect Password');
-            }
-        }
-    </script>
 
 </body>
 
